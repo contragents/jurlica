@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ЮРЛИЦА.РФ — Навигатор и сервисы для бизнеса</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/@dadata/suggestions@25.11.0/dist/suggestions.min.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --primary: #0052cc;
+            --primary-dark: #0747a6;
+            --accent: #ffab00;
+            --bg: #f4f5f7;
+            --text: #172b4d;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        /* Header */
+        header {
+            background: var(--white);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #dfe1e6;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        /* Hero & Search Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 4rem 5% 6rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .search-wrapper {
+            max-width: 800px;
+            margin: 2rem auto -8rem; /* Наплыв на следующий блок */
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-container {
+            display: flex;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            padding: 5px;
+        }
+
+        /* Стилизация обертки DaData для Flexbox */
+        .search-container > .suggestions-wrapper {
+            flex: 1 !important;
+        }
+
+        #party {
+            width: 100%;
+            border: none;
+            padding: 1.2rem 1.5rem;
+            font-size: 1.2rem;
+            outline: none;
+            border-radius: 10px 0 0 10px;
+        }
+
+        #search-btn {
+            background: var(--accent);
+            color: var(--white);
+            border: none;
+            padding: 0 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        #search-btn:hover { background: #e69a00; }
+
+        /* Services Grid */
+        .main-content {
+            padding: 10rem 5% 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ebecf0;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+            border-color: var(--primary);
+        }
+
+        .icon-box {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: #eef4ff;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+        }
+
+        .service-card h3 {
+            margin: 0 0 1rem;
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+
+        .service-card p {
+            font-size: 0.95rem;
+            color: #505f79;
+            flex-grow: 1;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-link {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .btn-link::after { content: ' →'; }
+
+        /* DaData Dropdown Fixes */
+        .suggestions-suggestions {
+            background: white !important;
+            color: var(--text) !important;
+            border-radius: 0 0 12px 12px !important;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+            left: 0 !important;
+            width: 100% !important;
+            text-align: left;
+        }
+
+        .suggestions-suggestion { padding: 12px 20px !important; border-bottom: 1px solid #f4f5f7; }
+        .suggestions-hint { color: #6b778c !important; font-size: 0.85rem; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .search-container { flex-direction: column; padding: 10px; }
+            #search-btn { padding: 1rem; margin-top: 10px; border-radius: 8px; }
+            #party { border-radius: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/" class="logo">ЮРЛИЦА.РФ</a>
+    <div class="nav-links">
+        <span>База знаний</span>
+        <span style="margin-left: 20px; font-weight: bold; color: var(--primary); cursor: pointer;">Вход в ЛК</span>
+    </div>
+</header>
+
+<section class="hero">
+    <h1>Сервисы для вашего бизнеса</h1>
+    <p>Быстрый поиск контрагентов и доступ к государственным услугам</p>
+
+    <div class="search-wrapper">
+        <div class="search-container">
+            <input id="party" name="party" type="text" placeholder="Введите название компании или ИНН..." autocomplete="off">
+            <button id="search-btn">Найти</button>
+        </div>
+    </div>
+</section>
+
+<main class="main-content">
+    <div class="section-title">
+        <h2>Чем мы можем помочь сегодня?</h2>
+    </div>
+
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="icon-box">🔐</div>
+            <h3>B2B Навигатор</h3>
+            <p>Единый хаб для входа в личные кабинеты: ФНС, Госуслуги, Честный Знак и банки. Помощь в настройке ЭЦП и КриптоПро.</p>
+            <a href="/navigator" class="btn-link">Войти в кабинеты</a>
+        </div>
+
+        <div class="service-card">
+            <div class="icon-box">🤝</div>
+            <h3>Безопасные расчеты</h3>
+            <p>Конструктор договоров между физлицами и юрлицами. Генерация закрывающих документов для финмониторинга.</p>
+            <a href="/deals" class="btn-link">Создать договор</a>
+        </div>
+
+        <div class="service-card">
+            <div class="icon-box">🏢</div>
+            <h3>Биржа компаний</h3>
+            <p>Покупка и продажа готового бизнеса и ООО с историей. Проверка чистоты активов перед сделкой.</p>
+            <a href="/market" class="btn-link">Смотреть объявления</a>
+        </div>
+
+        <div class="service-card">
+            <div class="icon-box">📉</div>
+            <h3>Центр контроля</h3>
+            <p>Мониторинг штрафов ГИБДД, задолженностей ФНС и калькулятор рисков по новым правилам маркировки.</p>
+            <a href="/control" class="btn-link">Проверить риски</a>
+        </div>
+    </div>
+</main>
+
+<footer style="text-align: center; padding: 4rem; color: #6b778c; font-size: 0.9rem;">
+    &copy; 2025 ЮРЛИЦА.РФ — Информационный портал для бизнеса.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@dadata/suggestions@25.11.0/dist/suggestions.min.js"></script>
+
+<script>
+    const input = document.getElementById("party");
+    const searchBtn = document.getElementById("search-btn");
+
+    // Вставьте ваш API-ключ от DaData
+    const API_KEY = "ea499ff0beb49e07708aea8b8d7e9d4a29cd2620";
+
+    let lastSuggestions = [];
+
+    // Инициализация поиска DaData
+    Dadata.createSuggestions(input, {
+        token: API_KEY,
+        type: "party",
+        onSuggestionsFetch: (suggestions) => {
+            lastSuggestions = suggestions;
+        },
+        onSelect: (suggestion) => {
+            // Если выбрали конкретный результат из списка
+            window.location.href = "/company/" + suggestion.data.inn;
+        }
+    });
+
+    // Логика кнопки "Найти"
+    function performSearch() {
+        const query = input.value.trim();
+        if (!query) return;
+
+        // Если в списке ровно 1 вариант - сразу переходим
+        if (lastSuggestions.length === 1) {
+            window.location.href = "/company/" + lastSuggestions[0].data.inn;
+        }
+        // Если вариантов много или пользователь нажал Enter на своем тексте
+        else {
+            window.location.href = "/search?q=" + encodeURIComponent(query);
+        }
+    }
+
+    searchBtn.addEventListener("click", performSearch);
+
+    // Обработка Enter
+    input.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+            setTimeout(performSearch, 200);
+        }
+    });
+</script>
+
+<!-- Блок всплывающего окна (Попап) -->
+<div id="domain-sale-popup" class="domain-popup-overlay">
+    <div class="domain-popup-content">
+        <button class="domain-popup-close" onclick="closeDomainPopup()">&times;</button>
+        <div class="domain-popup-header">
+            <span class="domain-badge">🔥 ПРЕМИУМ ПРЕДЛОЖЕНИЕ</span>
+            <h2>Домен ЮРЛИЦА.РФ продается!</h2>
+        </div>
+        <p class="domain-popup-text">
+            Вы можете приобрести этот уникальный домен или стать партнером проекта.
+            Сделка проходит официально и безопасно через ведущие платформы:
+        </p>
+        <div class="domain-popup-buttons">
+            <a href="https://www.reg.ru/domain/shop/lot/%D1%8E%D1%80%D0%BB%D0%B8%D1%86%D0%B0.%D1%80%D1%84" target="_blank" class="domain-btn domain-btn-regru">
+                Купить на Рег.ру
+            </a>
+            <a href="https://www.telderi.ru/ru/viewdomain/2743891" target="_blank" class="domain-btn domain-btn-telderi">
+                Купить на Telderi
+            </a>
+        </div>
+        <p class="domain-popup-footer">
+            Есть предложение по партнерству? <span id="secure-email-container"></span>
+        </p>
+    </div>
+</div>
+
+<!-- Стили и Скрипт -->
+<style>
+    .domain-popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 99999;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s ease;
+    }
+    .domain-popup-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    .domain-popup-content {
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 16px;
+        max-width: 480px;
+        width: 90%;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        position: relative;
+        text-align: center;
+        font-family: system-ui, -apple-system, sans-serif;
+        transform: translateY(-20px);
+        transition: transform 0.4s ease;
+    }
+    .domain-popup-overlay.active .domain-popup-content {
+        transform: translateY(0);
+    }
+    .domain-popup-close {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        background: none;
+        border: none;
+        font-size: 28px;
+        cursor: pointer;
+        color: #999;
+        transition: color 0.2s;
+    }
+    .domain-popup-close:hover {
+        color: #333;
+    }
+    .domain-badge {
+        background: #fff0f0;
+        color: #e53e3e;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+        letter-spacing: 0.5px;
+    }
+    .domain-popup-header h2 {
+        margin: 15px 0 10px 0;
+        color: #1a202c;
+        font-size: 24px;
+    }
+    .domain-popup-text {
+        color: #4a5568;
+        font-size: 15px;
+        line-height: 1.5;
+        margin-bottom: 25px;
+    }
+    .domain-popup-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+    .domain-btn {
+        display: block;
+        padding: 14px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 16px;
+        transition: all 0.2s ease;
+    }
+    .domain-btn-regru {
+        background: #2563eb;
+        color: white;
+    }
+    .domain-btn-regru:hover {
+        background: #1d4ed8;
+    }
+    .domain-btn-telderi {
+        background: #10b981;
+        color: white;
+    }
+    .domain-btn-telderi:hover {
+        background: #059669;
+    }
+    .domain-popup-footer {
+        font-size: 13px;
+        color: #718096;
+        margin: 0;
+    }
+    .domain-popup-footer a {
+        color: #2563eb;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .domain-popup-footer a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<script>
+    // Показываем попап через 2 секунды после загрузки страницы
+    window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            const popup = document.getElementById('domain-sale-popup');
+            if (popup) popup.classList.add('active');
+        }, 2000);
+    });
+
+    // Функция закрытия попапа
+    function closeDomainPopup() {
+        const popup = document.getElementById('domain-sale-popup');
+        if (popup) popup.classList.remove('active');
+    }
+
+    // Закрытие при клике на область вокруг попапа
+    window.addEventListener('click', (e) => {
+        const popup = document.getElementById('domain-sale-popup');
+        if (e.target === popup) {
+            closeDomainPopup();
+        }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+        // 1. Появление попапа через 2 секунды
+        setTimeout(() => {
+            const popup = document.getElementById('domain-sale-popup');
+            if (popup) popup.classList.add('active');
+        }, 2000);
+
+        // 2. Безопасная расшифровка и вставка email (ili@bk.ru)
+        // Строка ниже — это зашифрованный в Base64 адрес mailto:ili@bk.ru
+        const encodedData = "bWFpbHRvOmlsaUBiay5ydQ==";
+        const emailContainer = document.getElementById('secure-email-container');
+
+        if (emailContainer) {
+            const decodedUrl = atob(encodedData); // Расшифровка обратно в mailto:ili@bk.ru
+
+            const emailLink = document.createElement('a');
+            emailLink.href = decodedUrl;
+            emailLink.textContent = "Напишите нам";
+            emailLink.style.color = "#2563eb";
+            emailLink.style.textDecoration = "none";
+            emailLink.style.fontWeight = "500";
+
+            // Эффект подчеркивания при наведении
+            emailLink.addEventListener('mouseover', () => emailLink.style.textDecoration = 'underline');
+            emailLink.addEventListener('mouseout', () => emailLink.style.textDecoration = 'none');
+
+            emailContainer.appendChild(emailLink);
+        }
+    });
+
+</script>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=112066203', 'ym');
+
+    ym(112066203, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/112066203" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+</body>
+</html>
